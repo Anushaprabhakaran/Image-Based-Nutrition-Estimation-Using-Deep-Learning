@@ -14,7 +14,7 @@ This project implements a deep learning regression pipeline using a pretrained R
 
 - Checkpoint_1.ipynb — Baseline model, 2000 images, 10 epochs
 - Checkpoint_2.ipynb — Expanded dataset, 3489 images, 25 epochs
-- Final_Model.ipynb — Final model with all layers fine-tuned, learning rate scheduler, 35 epochs
+- Final Project Python Code.ipynb — Final model with all layers fine-tuned, learning rate scheduler, 35 epochs
 - README.md — This file
 
 ---
