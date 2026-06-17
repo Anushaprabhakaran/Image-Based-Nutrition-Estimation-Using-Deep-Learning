@@ -16,7 +16,6 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500&display=swap');
 
-/* ── HARD RESET all Streamlit spacing ── */
 html, body, [class*="css"] { font-family: 'Inter', sans-serif !important; }
 .main > div { padding: 0 !important; }
 .block-container { padding: 0 !important; max-width: 100% !important; margin: 0 !important; }
@@ -28,7 +27,6 @@ section[data-testid="stSidebar"] { display: none !important; }
 header[data-testid="stHeader"] { display: none !important; }
 .stMarkdown { margin: 0 !important; padding: 0 !important; }
 div[data-testid="stMarkdownContainer"] { margin: 0 !important; padding: 0 !important; }
-/* remove gap between columns */
 [data-testid="stHorizontalBlock"] { gap: 0 !important; padding: 0 !important; background: #dde6f0; }
 [data-testid="stColumn"] { padding: 10px !important; }
 
@@ -52,12 +50,26 @@ div[data-testid="stMarkdownContainer"] { margin: 0 !important; padding: 0 !impor
 /* ── HERO ── */
 .hero {
   background: linear-gradient(135deg, #0f1e35 0%, #162840 60%, #0f1e35 100%);
-  padding: 44px 42px 38px;
-  position: relative; overflow: hidden;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
   border-bottom: 1px solid #1e3050;
   height: 300px;
+  width: 100%;
 }
-.hero-content { position: relative; z-index: 3; max-width: 46%; }
+
+/* Hero text: absolutely placed on the LEFT half */
+.hero-content {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 48%;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 38px 0 38px 42px;
+}
+
 .hero-eyebrow {
   font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
   color: #4ade80; font-weight: 600; margin-bottom: 12px;
@@ -73,15 +85,16 @@ div[data-testid="stMarkdownContainer"] { margin: 0 !important; padding: 0 !impor
 }
 .hero-desc {
   font-size: 13px; color: #5a8ab0;
-  line-height: 1.7; margin-bottom: 24px; max-width: 95%;
+  line-height: 1.7; margin-bottom: 24px; max-width: 92%;
 }
 .hero-stats { display: flex; gap: 32px; }
 .stat-val { font-size: 22px; font-weight: 700; color: #fff; font-family: 'JetBrains Mono', monospace; }
 .stat-label { font-size: 11px; color: #4a7a9a; margin-top: 3px; }
 
-/* food items pinned inside hero */
+/* food emojis: all absolutely placed on the RIGHT half */
 .food-item {
-  position: absolute; z-index: 2;
+  position: absolute;
+  z-index: 2;
   filter: drop-shadow(0 6px 20px rgba(0,0,0,0.55));
 }
 
@@ -98,7 +111,6 @@ div[data-testid="stMarkdownContainer"] { margin: 0 !important; padding: 0 !impor
 }
 .panel-sub { font-size: 13px; color: #6a8aaa; margin-bottom: 18px; }
 
-/* upload */
 .upload-zone {
   border: 2px dashed #a8c4dc; border-radius: 12px;
   padding: 32px 20px; text-align: center; background: #f0f6fc; margin-bottom: 4px;
@@ -106,7 +118,6 @@ div[data-testid="stMarkdownContainer"] { margin: 0 !important; padding: 0 !impor
 .upload-text { font-size: 13px; color: #3a5a7a; font-weight: 500; margin-top: 12px; }
 .upload-sub { font-size: 12px; color: #7a9ab8; margin-top: 5px; }
 
-/* nutrition cards */
 .nut-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
 .nut-card {
   background: #fff; border: 1px solid #ccd8e4; border-radius: 14px;
@@ -123,7 +134,6 @@ div[data-testid="stMarkdownContainer"] { margin: 0 !important; padding: 0 !impor
 .nut-val { font-size: 30px; font-weight: 700; color: #0f1e35; font-family: 'JetBrains Mono', monospace; line-height: 1; }
 .nut-unit { font-size: 12px; color: #7a9ab8; margin-top: 5px; }
 
-/* macro */
 .section-head {
   font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
   text-transform: uppercase; color: #3a5a7a; margin-bottom: 10px;
@@ -139,7 +149,6 @@ div[data-testid="stMarkdownContainer"] { margin: 0 !important; padding: 0 !impor
   font-size: 12px; color: #713f12; margin-bottom: 16px;
 }
 
-/* how it works */
 .how-card { background: #f0f6fc; border: 1px solid #ccd8e4; border-radius: 14px; padding: 16px 18px; }
 .how-step { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
 .how-step:last-child { margin-bottom: 0; }
@@ -153,7 +162,6 @@ div[data-testid="stMarkdownContainer"] { margin: 0 !important; padding: 0 !impor
 .how-text { font-size: 12px; color: #2a4a6a; line-height: 1.6; }
 .how-text strong { color: #0f1e35; }
 
-/* empty state */
 .empty-state {
   display: flex; flex-direction: column; align-items: center;
   justify-content: center; text-align: center; padding: 4rem 2rem;
@@ -162,7 +170,6 @@ div[data-testid="stMarkdownContainer"] { margin: 0 !important; padding: 0 !impor
 .empty-title { font-size: 1.05rem; font-weight: 600; color: #4a6a8a; margin-bottom: 0.5rem; }
 .empty-desc { font-size: 0.9rem; line-height: 1.7; color: #7a9ab8; }
 
-/* footer */
 .footer {
   background: #0f1e35; padding: 16px 36px;
   display: flex; justify-content: space-between; align-items: center;
@@ -171,7 +178,6 @@ div[data-testid="stMarkdownContainer"] { margin: 0 !important; padding: 0 !impor
 .footer-l { font-size: 11px; color: #4a7a9a; }
 .footer-r { font-size: 11px; color: #4ade80; font-weight: 500; }
 
-/* hide Streamlit file uploader extras */
 [data-testid="stFileUploaderDropzoneInstructions"] { display: none !important; }
 [data-testid="stFileUploader"] section { border: none !important; padding: 0 !important; background: transparent !important; }
 [data-testid="stFileUploader"] { margin: 0 !important; padding: 0 !important; }
@@ -195,7 +201,9 @@ transform = transforms.Compose([
 
 EB = "https://fonts.gstatic.com/s/e/notoemoji/latest"
 
-# ── NAV + HERO rendered as one continuous HTML block ──────────────────────────
+# ── NAV + HERO: ONE single st.markdown block so position:absolute works ────────
+# The key fix: hero-content AND all food-items are inside ONE HTML block.
+# Streamlit wraps each st.markdown in a div, so splitting them breaks abs. positioning.
 st.markdown(f"""
 <div class="topnav">
   <div class="logo">
@@ -222,6 +230,25 @@ st.markdown(f"""
 </div>
 
 <div class="hero">
+
+  <!-- LEFT: text content -->
+  <div class="hero-content">
+    <div class="hero-eyebrow">Nutrition Estimation Using AI</div>
+    <div class="hero-title">Snap a meal.<br><span>Know your macros.</span></div>
+    <div class="hero-tagline">Image Recognition · Deep Learning</div>
+    <div class="hero-desc">
+      Upload any food photo and get an instant breakdown of calories, fat,
+      carbs, and protein — powered by a fine-tuned ResNet-50 model.
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-val">35</div><div class="stat-label">Training epochs</div></div>
+      <div><div class="stat-val">4</div><div class="stat-label">Nutrition outputs</div></div>
+      <div><div class="stat-val">224px</div><div class="stat-label">Input resolution</div></div>
+      <div><div class="stat-val">&lt;1s</div><div class="stat-label">Inference time</div></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: scattered food emojis -->
   <!-- ROW 1: top — sandwich, pizza, cake -->
   <div class="food-item" style="top:18px; left:52%; transform:rotate(-8deg);">
     <img src="{EB}/1f96a/emoji.svg" width="82" height="82" alt="sandwich"/>
@@ -255,21 +282,6 @@ st.markdown(f"""
     <img src="{EB}/1f966/emoji.svg" width="74" height="74" alt="broccoli"/>
   </div>
 
-  <div class="hero-content">
-    <div class="hero-eyebrow">Nutrition Estimation Using AI</div>
-    <div class="hero-title">Snap a meal.<br><span>Know your macros.</span></div>
-    <div class="hero-tagline">Image Recognition · Deep Learning</div>
-    <div class="hero-desc">
-      Upload any food photo and get an instant breakdown of calories, fat,
-      carbs, and protein — powered by a fine-tuned ResNet-50 model.
-    </div>
-    <div class="hero-stats">
-      <div><div class="stat-val">35</div><div class="stat-label">Training epochs</div></div>
-      <div><div class="stat-val">4</div><div class="stat-label">Nutrition outputs</div></div>
-      <div><div class="stat-val">224px</div><div class="stat-label">Input resolution</div></div>
-      <div><div class="stat-val">&lt;1s</div><div class="stat-label">Inference time</div></div>
-    </div>
-  </div>
 </div>
 
 <div class="panels-outer">
@@ -300,7 +312,7 @@ with col_left:
             <line x1="28.5" y1="6" x2="35.5" y2="6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
           </svg>
           <div class="upload-text">Drag and drop your food photo here</div>
-          <div class="upload-sub">or use the button above to browse files</div>
+          <div class="upload-sub">or click to browse files</div>
         </div>
         """, unsafe_allow_html=True)
 
