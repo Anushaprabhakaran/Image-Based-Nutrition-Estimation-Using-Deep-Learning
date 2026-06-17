@@ -5,7 +5,6 @@ from torchvision import models, transforms
 from PIL import Image
 import time
 
-# ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="NutriLens · AI Nutrition Estimator",
     page_icon="🥗",
@@ -13,164 +12,178 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-  /* ---------- global ---------- */
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500&display=swap');
 
-  html, body, [class*="css"] {
-    font-family: 'DM Sans', sans-serif;
-    color: #1a1a2e;
-  }
+html, body, [class*="css"] {
+  font-family: 'Inter', sans-serif;
+  background-color: #dde6f0;
+}
+.block-container { padding: 0 !important; max-width: 100% !important; }
+[data-testid="collapsedControl"] { display: none; }
 
-  /* Remove default Streamlit top padding */
-  .block-container { padding-top: 2rem; max-width: 960px; }
+/* ── NAV ── */
+.topnav {
+  background: #0f1e35;
+  padding: 13px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #1e3050;
+}
+.logo { display: flex; align-items: center; gap: 11px; }
+.logo-text { font-size: 16px; font-weight: 700; color: #fff; letter-spacing: -0.01em; }
+.logo-text span { color: #4ade80; }
+.nav-tags { display: flex; gap: 7px; }
+.nav-tag {
+  background: #1a2f4a; color: #7aabcf;
+  border: 1px solid #253d5a; border-radius: 20px;
+  padding: 4px 12px; font-size: 10.5px; font-weight: 500;
+}
 
-  /* ---------- hero ---------- */
-  .hero {
-    background: linear-gradient(135deg, #0f3460 0%, #16213e 60%, #1a1a2e 100%);
-    border-radius: 20px;
-    padding: 3rem 2.5rem 2.5rem;
-    margin-bottom: 2rem;
-    color: white;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero::before {
-    content: "";
-    position: absolute;
-    top: -60px; right: -60px;
-    width: 280px; height: 280px;
-    border-radius: 50%;
-    background: rgba(0,188,212,0.12);
-    pointer-events: none;
-  }
-  .hero-eyebrow {
-    font-size: 0.75rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #00bcd4;
-    font-weight: 600;
-    margin-bottom: 0.6rem;
-  }
-  .hero-title {
-    font-size: 2.6rem;
-    font-weight: 600;
-    line-height: 1.15;
-    margin: 0 0 0.8rem;
-  }
-  .hero-sub {
-    font-size: 1.05rem;
-    color: rgba(255,255,255,0.72);
-    max-width: 540px;
-    line-height: 1.6;
-    margin: 0 0 1.6rem;
-  }
-  .badge-row { display: flex; gap: 0.6rem; flex-wrap: wrap; }
-  .badge {
-    background: rgba(0,188,212,0.18);
-    border: 1px solid rgba(0,188,212,0.4);
-    color: #00e5ff;
-    border-radius: 40px;
-    padding: 0.25rem 0.85rem;
-    font-size: 0.78rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-  }
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(135deg, #0f1e35 0%, #162840 60%, #0f1e35 100%);
+  padding: 38px 36px 32px;
+  position: relative; overflow: hidden;
+  border-bottom: 1px solid #1e3050;
+  min-height: 260px;
+}
+.hero-content { position: relative; z-index: 3; max-width: 480px; }
+.hero-eyebrow {
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: #4ade80; font-weight: 600; margin-bottom: 10px;
+}
+.hero-title {
+  font-size: 36px; font-weight: 700; color: #fff;
+  letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 8px;
+}
+.hero-title span { color: #4ade80; }
+.hero-tagline { font-size: 13px; color: #7aabcf; font-weight: 500; margin-bottom: 8px; letter-spacing: 0.03em; }
+.hero-desc { font-size: 12px; color: #5a8ab0; line-height: 1.7; margin-bottom: 20px; max-width: 400px; }
+.hero-stats { display: flex; gap: 30px; }
+.stat-val { font-size: 19px; font-weight: 700; color: #fff; font-family: 'JetBrains Mono', monospace; }
+.stat-label { font-size: 10px; color: #4a7a9a; margin-top: 2px; }
 
-  /* ---------- upload zone ---------- */
-  .upload-card {
-    border: 2px dashed #c9d6df;
-    border-radius: 16px;
-    padding: 2.5rem 2rem;
-    text-align: center;
-    background: #f8fafc;
-    transition: border-color 0.2s;
-  }
-  .upload-card:hover { border-color: #0f3460; }
+/* food items — right 50% only, clear of text */
+.food-item {
+  position: absolute; z-index: 2;
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.5));
+}
+.food-item img { display: block; }
 
-  /* ---------- metric cards ---------- */
-  .metric-grid { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.2rem; }
-  .metric-card {
-    flex: 1 1 120px;
-    background: white;
-    border-radius: 14px;
-    padding: 1.2rem 1rem 1rem;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-    border-top: 3px solid var(--accent);
-    text-align: center;
-  }
-  .metric-label {
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #6b7a8d;
-    font-weight: 600;
-    margin-bottom: 0.4rem;
-  }
-  .metric-value {
-    font-family: 'DM Mono', monospace;
-    font-size: 1.75rem;
-    font-weight: 500;
-    color: #1a1a2e;
-    line-height: 1;
-  }
-  .metric-unit { font-size: 0.8rem; color: #6b7a8d; margin-top: 0.2rem; }
+/* ── PANELS ── */
+.panels-bg { background: #dde6f0; padding: 20px; }
+.panels {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; max-width: 1100px; margin: 0 auto;
+}
+.panel-card {
+  background: #fff; border-radius: 14px; padding: 22px;
+  box-shadow: 0 2px 12px rgba(15,30,53,0.08); border: 1px solid #ccd8e4;
+}
+.panel-head {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.13em;
+  text-transform: uppercase; color: #3a5a7a; margin-bottom: 4px;
+}
+.panel-sub { font-size: 11.5px; color: #6a8aaa; margin-bottom: 16px; }
 
-  /* accent colours per nutrient */
-  .cal  { --accent: #ef4444; }
-  .fat  { --accent: #f59e0b; }
-  .carb { --accent: #3b82f6; }
-  .prot { --accent: #10b981; }
+/* upload */
+.upload-zone {
+  border: 2px dashed #a8c4dc; border-radius: 12px;
+  padding: 28px 16px; text-align: center; background: #f0f6fc;
+}
+.upload-text { font-size: 12px; color: #3a5a7a; font-weight: 500; margin-top: 10px; }
+.upload-sub { font-size: 11px; color: #7a9ab8; margin-top: 4px; }
+.upload-btn {
+  display: inline-block; margin-top: 12px;
+  background: #0f1e35; color: #fff;
+  border-radius: 8px; padding: 8px 18px;
+  font-size: 11.5px; font-weight: 600;
+}
+.preview-area {
+  margin-top: 16px; background: #f0f6fc; border-radius: 12px;
+  height: 150px; display: flex; align-items: center; justify-content: center;
+  border: 1px solid #ccd8e4; color: #8aacca; font-size: 11px;
+}
 
-  /* ---------- result section ---------- */
-  .result-header {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #1a1a2e;
-    margin: 1.8rem 0 0.3rem;
-  }
-  .result-sub {
-    font-size: 0.88rem;
-    color: #6b7a8d;
-    margin-bottom: 0.8rem;
-  }
+/* nutrition cards */
+.nut-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.nut-card {
+  background: #fff; border: 1px solid #ccd8e4; border-radius: 12px;
+  padding: 14px 14px 12px; position: relative; overflow: hidden;
+  box-shadow: 0 1px 6px rgba(15,30,53,0.05);
+}
+.nut-top-bar { position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 12px 12px 0 0; }
+.nut-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: #4a6a8a;
+  margin-bottom: 8px; margin-top: 2px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.nut-val { font-size: 26px; font-weight: 700; color: #0f1e35; font-family: 'JetBrains Mono', monospace; line-height: 1; }
+.nut-unit { font-size: 11px; color: #7a9ab8; margin-top: 4px; }
 
-  /* ---------- info panel ---------- */
-  .info-pill {
-    display: inline-flex; align-items: center; gap: 0.4rem;
-    background: #eef2ff; color: #4f46e5;
-    border-radius: 8px; padding: 0.4rem 0.9rem;
-    font-size: 0.82rem; font-weight: 500;
-  }
+/* macro */
+.section-head {
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: #3a5a7a; margin-bottom: 9px;
+}
+.macro-bar-wrap { height: 10px; border-radius: 6px; background: #dde6f0; overflow: hidden; display: flex; margin-bottom: 9px; }
+.macro-legend { display: flex; gap: 14px; margin-bottom: 14px; }
+.macro-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+.macro-leg-item { font-size: 11px; color: #3a5a7a; }
 
-  /* ---------- footer ---------- */
-  .footer {
-    margin-top: 3rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #e2e8f0;
-    display: flex; justify-content: space-between; align-items: center;
-    flex-wrap: wrap; gap: 0.5rem;
-    font-size: 0.8rem; color: #94a3b8;
-  }
-  .footer a { color: #0f3460; text-decoration: none; font-weight: 500; }
+.disclaimer {
+  background: #fffbeb; border: 1px solid #d4a72c;
+  border-radius: 8px; padding: 8px 12px;
+  font-size: 11px; color: #713f12; margin-bottom: 14px;
+}
 
-  /* hide default streamlit file uploader label clutter */
-  [data-testid="stFileUploaderDropzoneInstructions"] { display: none; }
-  [data-testid="stFileUploader"] section { border: none; padding: 0; background: transparent; }
+/* how it works */
+.how-card { background: #f0f6fc; border: 1px solid #ccd8e4; border-radius: 12px; padding: 14px 16px; }
+.how-step { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
+.how-step:last-child { margin-bottom: 0; }
+.how-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #0f1e35; color: #fff;
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.how-text { font-size: 11px; color: #2a4a6a; line-height: 1.6; }
+.how-text strong { color: #0f1e35; }
+
+/* empty state */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; text-align: center;
+  padding: 4rem 2rem; color: #8aacca;
+}
+.empty-icon { font-size: 2.8rem; margin-bottom: 1rem; }
+.empty-title { font-size: 0.95rem; font-weight: 600; color: #4a6a8a; margin-bottom: 0.4rem; }
+.empty-desc { font-size: 0.83rem; line-height: 1.6; }
+
+/* footer */
+.footer {
+  background: #0f1e35; padding: 14px 32px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid #1e3050;
+}
+.footer-l { font-size: 10.5px; color: #4a7a9a; }
+.footer-r { font-size: 10.5px; color: #4ade80; font-weight: 500; }
+
+/* hide streamlit file uploader chrome */
+[data-testid="stFileUploaderDropzoneInstructions"] { display: none; }
+[data-testid="stFileUploader"] section { border: none; padding: 0; background: transparent; }
 </style>
 """, unsafe_allow_html=True)
 
-# ── Model ─────────────────────────────────────────────────────────────────────
+# ── Model ──────────────────────────────────────────────────────────────────────
 @st.cache_resource
 def load_model():
     model = models.resnet50(weights=None)
-    num_ftrs = model.fc.in_features
-    model.fc = nn.Linear(num_ftrs, 4)
-    model.load_state_dict(
-        torch.load("nutrition_model_epoch35.pth", map_location="cpu")
-    )
+    model.fc = nn.Linear(model.fc.in_features, 4)
+    model.load_state_dict(torch.load("nutrition_model_epoch35.pth", map_location="cpu"))
     model.eval()
     return model
 
@@ -180,150 +193,228 @@ transform = transforms.Compose([
     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
 ])
 
-# ── Hero ──────────────────────────────────────────────────────────────────────
+# ── NAV ────────────────────────────────────────────────────────────────────────
 st.markdown("""
-<div class="hero">
-  <div class="hero-eyebrow">AI · Computer Vision · ResNet-50</div>
-  <div class="hero-title">NutriLens</div>
-  <div class="hero-sub">
-    Upload any food photo and get an instant estimate of calories, fat,
-    carbohydrates, and protein — powered by a fine-tuned deep learning model.
+<div class="topnav">
+  <div class="logo">
+    <svg width="38" height="38" viewBox="0 0 38 38">
+      <circle cx="16" cy="16" r="13" fill="#0a1828" stroke="#4ade80" stroke-width="2.2"/>
+      <circle cx="16" cy="16" r="10.5" fill="#0d2235"/>
+      <circle cx="13" cy="14" r="3.5" fill="#16a34a"/>
+      <circle cx="16" cy="11.5" r="3" fill="#22c55e"/>
+      <circle cx="19" cy="14" r="3.2" fill="#15803d"/>
+      <rect x="15" y="17" width="2" height="4" rx="1" fill="#92601a"/>
+      <path d="M20,19 Q22,16 23,20 Q22,22 20,21Z" fill="#f97316"/>
+      <path d="M21.5,16 L21,14.5 M21.5,16 L23,15 M21.5,16 L20.5,14.8" stroke="#22c55e" stroke-width="0.8" stroke-linecap="round"/>
+      <circle cx="10" cy="10" r="2" fill="white" opacity="0.1"/>
+      <line x1="26" y1="26" x2="35" y2="35" stroke="#4ade80" stroke-width="3" stroke-linecap="round"/>
+      <line x1="25" y1="25" x2="27" y2="27" stroke="#2d9a5a" stroke-width="3.5" stroke-linecap="round"/>
+    </svg>
+    <div class="logo-text">Nutri<span>Lens</span></div>
   </div>
-  <div class="badge-row">
-    <span class="badge">ResNet-50 backbone</span>
-    <span class="badge">4-output regression</span>
-    <span class="badge">Trained 35 epochs</span>
-    <span class="badge">PyTorch · Streamlit</span>
+  <div class="nav-tags">
+    <span class="nav-tag">ResNet-50</span>
+    <span class="nav-tag">PyTorch</span>
+    <span class="nav-tag">Computer Vision</span>
   </div>
 </div>
 """, unsafe_allow_html=True)
 
-# ── Layout: two columns ───────────────────────────────────────────────────────
-col_upload, col_result = st.columns([1, 1], gap="large")
+# ── HERO ───────────────────────────────────────────────────────────────────────
+# Using static SVG versions of Noto Emoji (no animation)
+EMOJI_BASE = "https://fonts.gstatic.com/s/e/notoemoji/latest"
 
-with col_upload:
-    st.markdown("#### Upload a food image")
-    st.markdown(
-        '<p style="font-size:0.88rem;color:#6b7a8d;margin-top:-0.6rem;margin-bottom:1rem;">'
-        "JPG or PNG · best results with a clear, top-down food photo</p>",
-        unsafe_allow_html=True,
-    )
+st.markdown(f"""
+<div class="hero">
 
-    uploaded_file = st.file_uploader(
-        label="food image",
-        type=["jpg", "jpeg", "png"],
-        label_visibility="collapsed",
-    )
+  <!-- ROW 1: top — sandwich, pizza, cake -->
+  <div class="food-item" style="top:16px;left:52%;transform:rotate(-8deg);">
+    <img src="{EMOJI_BASE}/1f96a/emoji.svg" width="78" height="78" alt="sandwich"/>
+  </div>
+  <div class="food-item" style="top:10px;left:66%;transform:rotate(6deg);">
+    <img src="{EMOJI_BASE}/1f355/emoji.svg" width="74" height="74" alt="pizza"/>
+  </div>
+  <div class="food-item" style="top:8px;right:28px;transform:rotate(5deg);">
+    <img src="{EMOJI_BASE}/1f370/emoji.svg" width="70" height="70" alt="cake"/>
+  </div>
 
-    if uploaded_file:
-        image = Image.open(uploaded_file).convert("RGB")
-        st.image(image, use_container_width=True, caption="")
+  <!-- ROW 2: middle — burger, pasta, carrot -->
+  <div class="food-item" style="top:108px;left:50%;transform:rotate(-5deg);">
+    <img src="{EMOJI_BASE}/1f354/emoji.svg" width="82" height="82" alt="burger"/>
+  </div>
+  <div class="food-item" style="top:100px;left:64%;transform:rotate(4deg);">
+    <img src="{EMOJI_BASE}/1f35d/emoji.svg" width="70" height="70" alt="pasta"/>
+  </div>
+  <div class="food-item" style="top:55px;right:110px;transform:rotate(14deg);">
+    <img src="{EMOJI_BASE}/1f955/emoji.svg" width="64" height="64" alt="carrot"/>
+  </div>
 
-with col_result:
-    if uploaded_file:
-        with st.spinner("Analysing nutritional content…"):
-            time.sleep(0.4)          # subtle UX pause so the spinner is visible
+  <!-- ROW 3: bottom — noodles, fries, broccoli -->
+  <div class="food-item" style="top:168px;left:50%;transform:rotate(-4deg);">
+    <img src="{EMOJI_BASE}/1f35c/emoji.svg" width="70" height="70" alt="noodles"/>
+  </div>
+  <div class="food-item" style="top:162px;left:63%;transform:rotate(7deg);">
+    <img src="{EMOJI_BASE}/1f35f/emoji.svg" width="64" height="64" alt="fries"/>
+  </div>
+  <div class="food-item" style="top:158px;right:30px;transform:rotate(-6deg);">
+    <img src="{EMOJI_BASE}/1f966/emoji.svg" width="70" height="70" alt="broccoli"/>
+  </div>
+
+  <!-- Text content — left 48% only, never overlaps food -->
+  <div class="hero-content">
+    <div class="hero-eyebrow">Nutrition Estimation Using AI</div>
+    <div class="hero-title">Snap a meal.<br><span>Know your macros.</span></div>
+    <div class="hero-tagline">Image Recognition · Deep Learning</div>
+    <div class="hero-desc">
+      Upload any food photo and get an instant breakdown of calories, fat,
+      carbs, and protein — powered by a fine-tuned ResNet-50 model.
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-val">35</div><div class="stat-label">Training epochs</div></div>
+      <div><div class="stat-val">4</div><div class="stat-label">Nutrition outputs</div></div>
+      <div><div class="stat-val">224px</div><div class="stat-label">Input resolution</div></div>
+      <div><div class="stat-val">&lt;1s</div><div class="stat-label">Inference time</div></div>
+    </div>
+  </div>
+</div>
+""", unsafe_allow_html=True)
+
+# ── TWO PANELS ─────────────────────────────────────────────────────────────────
+col_left, col_right = st.columns([1, 1], gap="small")
+
+with col_left:
+    st.markdown('<div class="panel-card">', unsafe_allow_html=True)
+    st.markdown('<div class="panel-head">Upload food image</div>', unsafe_allow_html=True)
+    st.markdown('<div class="panel-sub">JPG or PNG · best with clear, well-lit food photos</div>', unsafe_allow_html=True)
+
+    uploaded = st.file_uploader("food", type=["jpg","jpeg","png"], label_visibility="collapsed")
+
+    if uploaded:
+        image = Image.open(uploaded).convert("RGB")
+        st.image(image, use_container_width=True)
+    else:
+        st.markdown("""
+        <div class="upload-zone">
+          <svg width="42" height="42" viewBox="0 0 42 42" style="margin:0 auto;display:block;">
+            <rect x="3" y="10" width="36" height="26" rx="5" fill="#dde6f0" stroke="#a8c4dc" stroke-width="1.4"/>
+            <circle cx="13" cy="20" r="4" fill="#a8c4dc"/>
+            <polygon points="3,36 14,22 22,28 30,18 39,36" fill="#b8d4e8" opacity="0.7"/>
+            <circle cx="32" cy="6" r="6" fill="#0f1e35"/>
+            <line x1="32" y1="2.5" x2="32" y2="9.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="28.5" y1="6" x2="35.5" y2="6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <div class="upload-text">Drag and drop your food photo here</div>
+          <div class="upload-sub">or use the button above to browse files</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+with col_right:
+    st.markdown('<div class="panel-card">', unsafe_allow_html=True)
+
+    if uploaded:
+        with st.spinner("Running inference…"):
+            time.sleep(0.3)
             try:
-                model = load_model()
-            except Exception:
-                st.error("⚠️ Model file not found. Make sure `nutrition_model_epoch35.pth` is in the same directory.")
+                mdl = load_model()
+            except Exception as e:
+                st.error(f"Model load error: {e}")
                 st.stop()
-
-            img_tensor = transform(image).unsqueeze(0)
+            t = transform(image).unsqueeze(0)
             with torch.no_grad():
-                pred = model(img_tensor).cpu().numpy()[0]
+                p = mdl(t).cpu().numpy()[0]
 
-        calories, fat, carbs, protein = pred
+        cal, fat, carb, prot = p
 
-        st.markdown("#### Estimated nutrition")
-        st.markdown(
-            '<p class="result-sub">Per serving · values are model estimates, not lab measurements</p>',
-            unsafe_allow_html=True,
-        )
+        st.markdown('<div class="panel-head">Estimated nutrition</div>', unsafe_allow_html=True)
+        st.markdown('<div class="panel-sub">Per serving · model estimates, not lab values</div>', unsafe_allow_html=True)
 
         st.markdown(f"""
-        <div class="metric-grid">
-          <div class="metric-card cal">
-            <div class="metric-label">Calories</div>
-            <div class="metric-value">{calories:.0f}</div>
-            <div class="metric-unit">kcal</div>
+        <div class="nut-grid">
+          <div class="nut-card">
+            <div class="nut-top-bar" style="background:#ef4444;"></div>
+            <div class="nut-label">Calories <span>🔥</span></div>
+            <div class="nut-val">{cal:.0f}</div>
+            <div class="nut-unit">kcal</div>
           </div>
-          <div class="metric-card fat">
-            <div class="metric-label">Fat</div>
-            <div class="metric-value">{fat:.1f}</div>
-            <div class="metric-unit">grams</div>
+          <div class="nut-card">
+            <div class="nut-top-bar" style="background:#f59e0b;"></div>
+            <div class="nut-label">Fat <span>🥑</span></div>
+            <div class="nut-val">{fat:.1f}</div>
+            <div class="nut-unit">grams</div>
           </div>
-          <div class="metric-card carb">
-            <div class="metric-label">Carbs</div>
-            <div class="metric-value">{carbs:.1f}</div>
-            <div class="metric-unit">grams</div>
+          <div class="nut-card">
+            <div class="nut-top-bar" style="background:#3b82f6;"></div>
+            <div class="nut-label">Carbs <span>🌾</span></div>
+            <div class="nut-val">{carb:.1f}</div>
+            <div class="nut-unit">grams</div>
           </div>
-          <div class="metric-card prot">
-            <div class="metric-label">Protein</div>
-            <div class="metric-value">{protein:.1f}</div>
-            <div class="metric-unit">grams</div>
+          <div class="nut-card">
+            <div class="nut-top-bar" style="background:#22c55e;"></div>
+            <div class="nut-label">Protein <span>💪</span></div>
+            <div class="nut-val">{prot:.1f}</div>
+            <div class="nut-unit">grams</div>
           </div>
         </div>
         """, unsafe_allow_html=True)
 
-        # Macro bar
-        total_macro = fat * 9 + carbs * 4 + protein * 4
-        if total_macro > 0:
-            pct_fat  = fat  * 9 / total_macro * 100
-            pct_carb = carbs * 4 / total_macro * 100
-            pct_prot = protein * 4 / total_macro * 100
+        total = fat * 9 + carb * 4 + prot * 4
+        if total > 0:
+            pf = fat * 9 / total * 100
+            pc = carb * 4 / total * 100
+            pp = prot * 4 / total * 100
 
-            st.markdown('<div class="result-header">Macro breakdown</div>', unsafe_allow_html=True)
-            st.markdown(
-                f'<p class="result-sub">Fat {pct_fat:.0f}% · Carbs {pct_carb:.0f}% · Protein {pct_prot:.0f}%</p>',
-                unsafe_allow_html=True,
-            )
-            bar_html = f"""
-            <div style="display:flex;height:12px;border-radius:6px;overflow:hidden;background:#f1f5f9;margin-bottom:1.6rem;">
-              <div style="width:{pct_fat:.1f}%;background:#f59e0b;"></div>
-              <div style="width:{pct_carb:.1f}%;background:#3b82f6;"></div>
-              <div style="width:{pct_prot:.1f}%;background:#10b981;"></div>
+            st.markdown(f"""
+            <div class="section-head">Macro energy split</div>
+            <div class="macro-bar-wrap">
+              <div style="width:{pf:.1f}%;background:#f59e0b;"></div>
+              <div style="width:{pc:.1f}%;background:#3b82f6;"></div>
+              <div style="width:{pp:.1f}%;background:#22c55e;"></div>
             </div>
-            """
-            st.markdown(bar_html, unsafe_allow_html=True)
+            <div class="macro-legend">
+              <span class="macro-leg-item"><span class="macro-dot" style="background:#f59e0b;"></span>Fat {pf:.0f}%</span>
+              <span class="macro-leg-item"><span class="macro-dot" style="background:#3b82f6;"></span>Carbs {pc:.0f}%</span>
+              <span class="macro-leg-item"><span class="macro-dot" style="background:#22c55e;"></span>Protein {pp:.0f}%</span>
+            </div>
+            <div class="disclaimer">⚠️ Estimates may vary with portion size and cooking method.</div>
+            """, unsafe_allow_html=True)
 
-        st.markdown(
-            '<div class="info-pill">ℹ️ Estimates may vary with portion size and food preparation method</div>',
-            unsafe_allow_html=True,
-        )
+        st.markdown("""
+        <div class="how-card">
+          <div class="section-head" style="margin-bottom:10px;">How it works</div>
+          <div class="how-step">
+            <div class="how-num">1</div>
+            <div class="how-text"><strong>Image preprocessing</strong> — resized to 224×224px, normalised with ImageNet statistics</div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">2</div>
+            <div class="how-text"><strong>ResNet-50 inference</strong> — 50-layer CNN extracts visual features from the food image</div>
+          </div>
+          <div class="how-step">
+            <div class="how-num">3</div>
+            <div class="how-text"><strong>4-output regression</strong> — custom final layer predicts all 4 nutrients simultaneously</div>
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
 
     else:
-        # Empty state
         st.markdown("""
-        <div style="height:100%;display:flex;flex-direction:column;justify-content:center;
-                    align-items:center;padding:3rem 1rem;text-align:center;color:#94a3b8;">
-          <div style="font-size:3rem;margin-bottom:1rem;">🥗</div>
-          <div style="font-size:1rem;font-weight:600;color:#64748b;margin-bottom:0.4rem;">
-            No image uploaded yet
-          </div>
-          <div style="font-size:0.85rem;line-height:1.6;">
-            Upload a food photo on the left and the model<br>will estimate its nutritional content instantly.
-          </div>
+        <div class="panel-head">Estimated nutrition</div>
+        <div class="panel-sub">Per serving · model estimates, not lab values</div>
+        <div class="empty-state">
+          <div class="empty-icon">🍽️</div>
+          <div class="empty-title">No image uploaded yet</div>
+          <div class="empty-desc">Upload a food photo on the left and the model<br>will estimate its nutritional content in under a second.</div>
         </div>
         """, unsafe_allow_html=True)
 
-# ── How it works (collapsible) ────────────────────────────────────────────────
-with st.expander("How it works"):
-    st.markdown("""
-    **Model architecture:** ResNet-50 pre-trained on ImageNet, with the final fully-connected
-    layer replaced by a 4-output linear layer for multi-target regression (calories, fat, carbs, protein).
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    **Training:** Fine-tuned for 35 epochs on a labelled food image dataset. Input images are resized
-    to 224 × 224 and normalised using ImageNet statistics before inference.
-
-    **Limitations:** The model estimates nutrition from visual features alone — it cannot account for
-    hidden ingredients, cooking oils, or exact portion weights. Treat outputs as approximate starting points.
-    """)
-
-# ── Footer ────────────────────────────────────────────────────────────────────
+# ── FOOTER ─────────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="footer">
-  <span>Built with PyTorch · Streamlit · ResNet-50</span>
-  <span>AI/ML Course Project · <a href="https://linkedin.com" target="_blank">LinkedIn</a></span>
+  <div class="footer-l">Built with PyTorch · ResNet-50 · Streamlit · Fine-tuned 35 epochs</div>
+  <div class="footer-r">LinkedIn ↗</div>
 </div>
 """, unsafe_allow_html=True)
