@@ -27,8 +27,19 @@ section[data-testid="stSidebar"] { display: none !important; }
 header[data-testid="stHeader"] { display: none !important; }
 .stMarkdown { margin: 0 !important; padding: 0 !important; }
 div[data-testid="stMarkdownContainer"] { margin: 0 !important; padding: 0 !important; }
+/* style each column as a white card */
+[data-testid="stColumn"] {
+  background: #fff !important;
+  border-radius: 16px !important;
+  box-shadow: 0 2px 16px rgba(15,30,53,0.09) !important;
+  border: 1px solid #ccd8e4 !important;
+  padding: 24px !important;
+}
+
+/* header block at top of each card */
+.panel-card-top { margin-bottom: 4px; }
+
 [data-testid="stHorizontalBlock"] { gap: 0 !important; padding: 0 !important; background: #dde6f0; }
-[data-testid="stColumn"] { padding: 10px !important; }
 
 /* ── NAV ── */
 .topnav {
@@ -71,25 +82,25 @@ div[data-testid="stMarkdownContainer"] { margin: 0 !important; padding: 0 !impor
 }
 
 .hero-eyebrow {
-  font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+  font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase;
   color: #4ade80; font-weight: 600; margin-bottom: 12px;
 }
 .hero-title {
-  font-size: 42px; font-weight: 700; color: #fff;
+  font-size: 46px; font-weight: 700; color: #fff;
   letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 10px;
 }
 .hero-title span { color: #4ade80; }
 .hero-tagline {
-  font-size: 15px; color: #7aabcf;
+  font-size: 17px; color: #7aabcf;
   font-weight: 500; margin-bottom: 10px; letter-spacing: 0.03em;
 }
 .hero-desc {
-  font-size: 13px; color: #5a8ab0;
+  font-size: 15px; color: #5a8ab0;
   line-height: 1.7; margin-bottom: 24px; max-width: 92%;
 }
 .hero-stats { display: flex; gap: 32px; }
-.stat-val { font-size: 22px; font-weight: 700; color: #fff; font-family: 'JetBrains Mono', monospace; }
-.stat-label { font-size: 11px; color: #4a7a9a; margin-top: 3px; }
+.stat-val { font-size: 26px; font-weight: 700; color: #fff; font-family: 'JetBrains Mono', monospace; }
+.stat-label { font-size: 13px; color: #4a7a9a; margin-top: 3px; }
 
 /* food emojis: all absolutely placed on the RIGHT half */
 .food-item {
@@ -106,17 +117,17 @@ div[data-testid="stMarkdownContainer"] { margin: 0 !important; padding: 0 !impor
   height: 100%;
 }
 .panel-head {
-  font-size: 12px; font-weight: 700; letter-spacing: 0.13em;
-  text-transform: uppercase; color: #3a5a7a; margin-bottom: 5px;
+  font-size: 15px; font-weight: 700; letter-spacing: 0.13em;
+  text-transform: uppercase; color: #3a5a7a; margin-bottom: 6px;
 }
-.panel-sub { font-size: 13px; color: #6a8aaa; margin-bottom: 18px; }
+.panel-sub { font-size: 14px; color: #6a8aaa; margin-bottom: 20px; }
 
 .upload-zone {
   border: 2px dashed #a8c4dc; border-radius: 12px;
   padding: 32px 20px; text-align: center; background: #f0f6fc; margin-bottom: 4px;
 }
-.upload-text { font-size: 13px; color: #3a5a7a; font-weight: 500; margin-top: 12px; }
-.upload-sub { font-size: 12px; color: #7a9ab8; margin-top: 5px; }
+.upload-text { font-size: 15px; color: #3a5a7a; font-weight: 500; margin-top: 12px; }
+.upload-sub { font-size: 13px; color: #7a9ab8; margin-top: 5px; }
 
 .nut-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
 .nut-card {
@@ -126,57 +137,57 @@ div[data-testid="stMarkdownContainer"] { margin: 0 !important; padding: 0 !impor
 }
 .nut-top-bar { position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 14px 14px 0 0; }
 .nut-label {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+  font-size: 13px; font-weight: 700; letter-spacing: 0.12em;
   text-transform: uppercase; color: #4a6a8a;
   margin-bottom: 10px; margin-top: 4px;
   display: flex; justify-content: space-between; align-items: center;
 }
-.nut-val { font-size: 30px; font-weight: 700; color: #0f1e35; font-family: 'JetBrains Mono', monospace; line-height: 1; }
-.nut-unit { font-size: 12px; color: #7a9ab8; margin-top: 5px; }
+.nut-val { font-size: 34px; font-weight: 700; color: #0f1e35; font-family: 'JetBrains Mono', monospace; line-height: 1; }
+.nut-unit { font-size: 14px; color: #7a9ab8; margin-top: 5px; }
 
 .section-head {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+  font-size: 13px; font-weight: 700; letter-spacing: 0.12em;
   text-transform: uppercase; color: #3a5a7a; margin-bottom: 10px;
 }
-.macro-bar-wrap { height: 11px; border-radius: 6px; background: #dde6f0; overflow: hidden; display: flex; margin-bottom: 10px; }
+.macro-bar-wrap { height: 13px; border-radius: 6px; background: #dde6f0; overflow: hidden; display: flex; margin-bottom: 10px; }
 .macro-legend { display: flex; gap: 16px; margin-bottom: 16px; }
-.macro-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
-.macro-leg-item { font-size: 12px; color: #3a5a7a; }
+.macro-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+.macro-leg-item { font-size: 14px; color: #3a5a7a; }
 
 .disclaimer {
   background: #fffbeb; border: 1px solid #d4a72c;
   border-radius: 9px; padding: 10px 14px;
-  font-size: 12px; color: #713f12; margin-bottom: 16px;
+  font-size: 14px; color: #713f12; margin-bottom: 16px;
 }
 
 .how-card { background: #f0f6fc; border: 1px solid #ccd8e4; border-radius: 14px; padding: 16px 18px; }
 .how-step { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
 .how-step:last-child { margin-bottom: 0; }
 .how-num {
-  width: 24px; height: 24px; border-radius: 50%;
+  width: 26px; height: 26px; border-radius: 50%;
   background: #0f1e35; color: #fff;
-  font-size: 11px; font-weight: 700;
+  font-size: 13px; font-weight: 700;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0; margin-top: 1px;
 }
-.how-text { font-size: 12px; color: #2a4a6a; line-height: 1.6; }
+.how-text { font-size: 14px; color: #2a4a6a; line-height: 1.6; }
 .how-text strong { color: #0f1e35; }
 
 .empty-state {
   display: flex; flex-direction: column; align-items: center;
   justify-content: center; text-align: center; padding: 4rem 2rem;
 }
-.empty-icon { font-size: 3rem; margin-bottom: 1rem; }
-.empty-title { font-size: 1.05rem; font-weight: 600; color: #4a6a8a; margin-bottom: 0.5rem; }
-.empty-desc { font-size: 0.9rem; line-height: 1.7; color: #7a9ab8; }
+.empty-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+.empty-title { font-size: 1.2rem; font-weight: 600; color: #4a6a8a; margin-bottom: 0.5rem; }
+.empty-desc { font-size: 1rem; line-height: 1.7; color: #7a9ab8; }
 
 .footer {
   background: #0f1e35; padding: 16px 36px;
   display: flex; justify-content: space-between; align-items: center;
   border-top: 1px solid #1e3050;
 }
-.footer-l { font-size: 11px; color: #4a7a9a; }
-.footer-r { font-size: 11px; color: #4ade80; font-weight: 500; }
+.footer-l { font-size: 13px; color: #4a7a9a; }
+.footer-r { font-size: 13px; color: #4ade80; font-weight: 500; }
 
 [data-testid="stFileUploaderDropzoneInstructions"] { display: none !important; }
 [data-testid="stFileUploader"] section { border: none !important; padding: 0 !important; background: transparent !important; }
@@ -248,38 +259,48 @@ st.markdown(f"""
     </div>
   </div>
 
-  <!-- RIGHT: scattered food emojis -->
-  <!-- ROW 1: top — sandwich, pizza, cake -->
-  <div class="food-item" style="top:18px; left:52%; transform:rotate(-8deg);">
-    <img src="{EB}/1f96a/emoji.svg" width="82" height="82" alt="sandwich"/>
+  <!-- RIGHT: scattered food emojis spread evenly across right 52% of hero -->
+  <!-- COL A ~54%  |  COL B ~67%  |  COL C ~80%  |  COL D right:20px -->
+  <!-- ROW 1: top -->
+  <div class="food-item" style="top:14px; left:54%; transform:rotate(-8deg);">
+    <img src="{EB}/1f96a/emoji.svg" width="80" height="80" alt="sandwich"/>
   </div>
-  <div class="food-item" style="top:12px; left:67%; transform:rotate(6deg);">
-    <img src="{EB}/1f355/emoji.svg" width="78" height="78" alt="pizza"/>
+  <div class="food-item" style="top:8px; left:67%; transform:rotate(6deg);">
+    <img src="{EB}/1f355/emoji.svg" width="76" height="76" alt="pizza"/>
   </div>
-  <div class="food-item" style="top:10px; right:32px; transform:rotate(5deg);">
-    <img src="{EB}/1f370/emoji.svg" width="74" height="74" alt="cake"/>
+  <div class="food-item" style="top:10px; left:80%; transform:rotate(-4deg);">
+    <img src="{EB}/1f955/emoji.svg" width="66" height="66" alt="carrot"/>
   </div>
-
-  <!-- ROW 2: middle — burger, pasta, carrot -->
-  <div class="food-item" style="top:112px; left:51%; transform:rotate(-5deg);">
-    <img src="{EB}/1f354/emoji.svg" width="86" height="86" alt="burger"/>
-  </div>
-  <div class="food-item" style="top:104px; left:65%; transform:rotate(4deg);">
-    <img src="{EB}/1f35d/emoji.svg" width="74" height="74" alt="pasta"/>
-  </div>
-  <div class="food-item" style="top:58px; right:118px; transform:rotate(14deg);">
-    <img src="{EB}/1f955/emoji.svg" width="68" height="68" alt="carrot"/>
+  <div class="food-item" style="top:6px; right:18px; transform:rotate(5deg);">
+    <img src="{EB}/1f370/emoji.svg" width="72" height="72" alt="cake"/>
   </div>
 
-  <!-- ROW 3: bottom — noodles, fries, broccoli -->
-  <div class="food-item" style="top:196px; left:52%; transform:rotate(-4deg);">
-    <img src="{EB}/1f35c/emoji.svg" width="74" height="74" alt="noodles"/>
+  <!-- ROW 2: middle -->
+  <div class="food-item" style="top:110px; left:53%; transform:rotate(-5deg);">
+    <img src="{EB}/1f354/emoji.svg" width="84" height="84" alt="burger"/>
   </div>
-  <div class="food-item" style="top:188px; left:65%; transform:rotate(7deg);">
-    <img src="{EB}/1f35f/emoji.svg" width="68" height="68" alt="fries"/>
+  <div class="food-item" style="top:106px; left:66%; transform:rotate(4deg);">
+    <img src="{EB}/1f35d/emoji.svg" width="72" height="72" alt="pasta"/>
   </div>
-  <div class="food-item" style="top:182px; right:34px; transform:rotate(-6deg);">
-    <img src="{EB}/1f966/emoji.svg" width="74" height="74" alt="broccoli"/>
+  <div class="food-item" style="top:100px; left:79%; transform:rotate(-6deg);">
+    <img src="{EB}/1f35f/emoji.svg" width="66" height="66" alt="fries"/>
+  </div>
+  <div class="food-item" style="top:102px; right:16px; transform:rotate(8deg);">
+    <img src="{EB}/1f966/emoji.svg" width="72" height="72" alt="broccoli"/>
+  </div>
+
+  <!-- ROW 3: bottom -->
+  <div class="food-item" style="top:202px; left:54%; transform:rotate(-4deg);">
+    <img src="{EB}/1f35c/emoji.svg" width="72" height="72" alt="noodles"/>
+  </div>
+  <div class="food-item" style="top:196px; left:67%; transform:rotate(7deg);">
+    <img src="{EB}/1f9c6/emoji.svg" width="68" height="68" alt="falafel"/>
+  </div>
+  <div class="food-item" style="top:200px; left:80%; transform:rotate(-5deg);">
+    <img src="{EB}/1f353/emoji.svg" width="66" height="66" alt="strawberry"/>
+  </div>
+  <div class="food-item" style="top:198px; right:16px; transform:rotate(4deg);">
+    <img src="{EB}/1f347/emoji.svg" width="70" height="70" alt="grapes"/>
   </div>
 
 </div>
@@ -288,12 +309,18 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # ── TWO COLUMNS ────────────────────────────────────────────────────────────────
+# Strategy: style the stColumn itself as the white card via CSS nth-child selectors.
+# Each column's first markdown is the header block (always inside the card visually).
 col_left, col_right = st.columns([1, 1])
 
 with col_left:
-    st.markdown('<div class="panel-card">', unsafe_allow_html=True)
-    st.markdown('<div class="panel-head">Upload food image</div>', unsafe_allow_html=True)
-    st.markdown('<div class="panel-sub">JPG or PNG · best with clear, well-lit food photos</div>', unsafe_allow_html=True)
+    # Header + uploader placeholder — all self-contained HTML blocks inside the card
+    st.markdown("""
+    <div class="panel-card-top">
+      <div class="panel-head">Upload food image</div>
+      <div class="panel-sub">JPG or PNG · best with clear, well-lit food photos</div>
+    </div>
+    """, unsafe_allow_html=True)
 
     uploaded = st.file_uploader("food", type=["jpg","jpeg","png"], label_visibility="collapsed")
 
@@ -316,11 +343,7 @@ with col_left:
         </div>
         """, unsafe_allow_html=True)
 
-    st.markdown('</div>', unsafe_allow_html=True)
-
 with col_right:
-    st.markdown('<div class="panel-card">', unsafe_allow_html=True)
-
     if uploaded:
         with st.spinner("Running inference…"):
             time.sleep(0.3)
@@ -335,10 +358,11 @@ with col_right:
 
         cal, fat, carb, prot = p
 
-        st.markdown('<div class="panel-head">Estimated nutrition</div>', unsafe_allow_html=True)
-        st.markdown('<div class="panel-sub">Per serving · model estimates, not lab values</div>', unsafe_allow_html=True)
-
         st.markdown(f"""
+        <div class="panel-card-top">
+          <div class="panel-head">Estimated nutrition</div>
+          <div class="panel-sub">Per serving · model estimates, not lab values</div>
+        </div>
         <div class="nut-grid">
           <div class="nut-card">
             <div class="nut-top-bar" style="background:#ef4444;"></div>
@@ -407,16 +431,16 @@ with col_right:
 
     else:
         st.markdown("""
-        <div class="panel-head">Estimated nutrition</div>
-        <div class="panel-sub">Per serving · model estimates, not lab values</div>
+        <div class="panel-card-top">
+          <div class="panel-head">Estimated nutrition</div>
+          <div class="panel-sub">Per serving · model estimates, not lab values</div>
+        </div>
         <div class="empty-state">
           <div class="empty-icon">🍽️</div>
           <div class="empty-title">No image uploaded yet</div>
           <div class="empty-desc">Upload a food photo on the left and the model<br>will estimate its nutritional content in under a second.</div>
         </div>
         """, unsafe_allow_html=True)
-
-    st.markdown('</div>', unsafe_allow_html=True)
 
 # close panels-outer + footer
 st.markdown("""
