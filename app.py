@@ -65,7 +65,7 @@ div[data-testid="stMarkdownContainer"] { margin: 0 !important; padding: 0 !impor
   position: relative;
   overflow: hidden;
   border-bottom: 1px solid #1e3050;
-  height: 300px;
+  height: 360px;
   width: 100%;
 }
 
@@ -262,44 +262,44 @@ st.markdown(f"""
   <!-- RIGHT: scattered food emojis spread evenly across right 52% of hero -->
   <!-- COL A ~54%  |  COL B ~67%  |  COL C ~80%  |  COL D right:20px -->
   <!-- ROW 1: top -->
-  <div class="food-item" style="top:14px; left:54%; transform:rotate(-8deg);">
+  <div class="food-item" style="top:22px; left:54%; transform:rotate(-8deg);">
     <img src="{EB}/1f96a/emoji.svg" width="80" height="80" alt="sandwich"/>
   </div>
-  <div class="food-item" style="top:8px; left:67%; transform:rotate(6deg);">
+  <div class="food-item" style="top:16px; left:67%; transform:rotate(6deg);">
     <img src="{EB}/1f355/emoji.svg" width="76" height="76" alt="pizza"/>
   </div>
-  <div class="food-item" style="top:10px; left:80%; transform:rotate(-4deg);">
+  <div class="food-item" style="top:18px; left:80%; transform:rotate(-4deg);">
     <img src="{EB}/1f955/emoji.svg" width="66" height="66" alt="carrot"/>
   </div>
-  <div class="food-item" style="top:6px; right:18px; transform:rotate(5deg);">
+  <div class="food-item" style="top:14px; right:18px; transform:rotate(5deg);">
     <img src="{EB}/1f370/emoji.svg" width="72" height="72" alt="cake"/>
   </div>
 
   <!-- ROW 2: middle -->
-  <div class="food-item" style="top:110px; left:53%; transform:rotate(-5deg);">
+  <div class="food-item" style="top:138px; left:53%; transform:rotate(-5deg);">
     <img src="{EB}/1f354/emoji.svg" width="84" height="84" alt="burger"/>
   </div>
-  <div class="food-item" style="top:106px; left:66%; transform:rotate(4deg);">
+  <div class="food-item" style="top:134px; left:66%; transform:rotate(4deg);">
     <img src="{EB}/1f35d/emoji.svg" width="72" height="72" alt="pasta"/>
   </div>
-  <div class="food-item" style="top:100px; left:79%; transform:rotate(-6deg);">
+  <div class="food-item" style="top:128px; left:79%; transform:rotate(-6deg);">
     <img src="{EB}/1f35f/emoji.svg" width="66" height="66" alt="fries"/>
   </div>
-  <div class="food-item" style="top:102px; right:16px; transform:rotate(8deg);">
+  <div class="food-item" style="top:130px; right:16px; transform:rotate(8deg);">
     <img src="{EB}/1f966/emoji.svg" width="72" height="72" alt="broccoli"/>
   </div>
 
   <!-- ROW 3: bottom -->
-  <div class="food-item" style="top:202px; left:54%; transform:rotate(-4deg);">
+  <div class="food-item" style="top:254px; left:54%; transform:rotate(-4deg);">
     <img src="{EB}/1f35c/emoji.svg" width="72" height="72" alt="noodles"/>
   </div>
-  <div class="food-item" style="top:196px; left:67%; transform:rotate(7deg);">
+  <div class="food-item" style="top:248px; left:67%; transform:rotate(7deg);">
     <img src="{EB}/1f9c6/emoji.svg" width="68" height="68" alt="falafel"/>
   </div>
-  <div class="food-item" style="top:200px; left:80%; transform:rotate(-5deg);">
+  <div class="food-item" style="top:252px; left:80%; transform:rotate(-5deg);">
     <img src="{EB}/1f353/emoji.svg" width="66" height="66" alt="strawberry"/>
   </div>
-  <div class="food-item" style="top:198px; right:16px; transform:rotate(4deg);">
+  <div class="food-item" style="top:250px; right:16px; transform:rotate(4deg);">
     <img src="{EB}/1f347/emoji.svg" width="70" height="70" alt="grapes"/>
   </div>
 
